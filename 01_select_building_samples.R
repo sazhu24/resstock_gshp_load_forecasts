@@ -19,11 +19,7 @@ conflicted::conflict_prefer("summarize", "dplyr")
 # 0) Configs
 # ----------------------------
 
-source("R/config.R")
-
-# root_dir   <- "C:/Users/63526/OneDrive - ICF/VA GREC/resstock_gshp_load_forecasts"
-# sample_size <- 100
-# seed        <- 123
+source("00_config.R")
 
 cfg_defaults <- list(
   root_dir   = root_dir,
@@ -72,7 +68,7 @@ cfgs <- list(
   scenario5 = merge_cfg(
     scenario = "scenario5",
     sqft_allowed    = c(1698, 2179, 2678),
-    vintage_allowed = c("1970s"),
+    vintage_allowed = c("1990s", "1980s", "1970s"),
     hvac_efficiency = "Fuel Furnace, 80% AFUE"
     # heating_fuel optional / omitted
   )
