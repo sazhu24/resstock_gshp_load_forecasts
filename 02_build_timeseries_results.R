@@ -21,31 +21,30 @@ conflicted::conflict_prefer("summarize", "dplyr")
 # ----------------------------
 source("00_config.R")
 
+# Change this to switch which scenario is processed
+#active_scenario <- "scenario1"
+
+# Use centralized config values
 cfg <- list(
-  state = "VA",
-  timezone = "America/New_York",
-  base_url = "https://oedi-data-lake.s3.amazonaws.com/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/2024/resstock_amy2018_release_2/timeseries_individual_buildings/by_state/",
-  cache_dir = path(root_dir, "ResStock", "timeseries"),
-  out_dir   = path(root_dir, "ResStock"),
-  upgrade_baseline = 0,
-  upgrade_gshp = 5,
+  state = state,
+  timezone = timezone,
+  base_url = base_url,
+  cache_dir = cache_dir,
+  out_dir   = resstock_dir,
+  upgrade_baseline = upgrade_baseline,
+  upgrade_gshp = upgrade_gshp,
   
-  summer_peak_day   = "2018-07-02",
-  summer_peak_hour  = "2018-07-02 16:00:00",
-  summer_peak_label = "July 2, 4PM",
+  summer_peak_day   = summer_peak_day,
+  summer_peak_hour  = summer_peak_hour,
+  summer_peak_label = summer_peak_label,
   
-  winter_peak_day   = "2018-01-07",
-  winter_peak_hour  = "2018-01-07 07:00:00",
-  winter_peak_label = "Jan 7, 7AM"
+  winter_peak_day   = winter_peak_day,
+  winter_peak_hour  = winter_peak_hour,
+  winter_peak_label = winter_peak_label
 )
 
 dir_create(cfg$cache_dir)
 dir_create(cfg$out_dir)
-
-# ----------------------------
-# Choose scenario to run
-# ----------------------------
-active_scenario <- "scenario2"  # <--- change this
 
 
 # check if output file exists and prompt user to confirm override

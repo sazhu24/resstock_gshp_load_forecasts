@@ -21,6 +21,12 @@ conflicted::conflict_prefer("summarize", "dplyr")
 
 source("00_config.R")
 
+# Change this to switch which scenario is processed
+#active_scenario <- "scenario1"
+
+# ----------------------------
+# Scenario definitions
+# ----------------------------
 cfg_defaults <- list(
   root_dir   = root_dir,
   sample_size = sample_size,
@@ -75,10 +81,9 @@ cfgs <- list(
 )
 
 # ----------------------------
-# 0b) Choose which cfg to run
+# Set which cfg to run
 # ----------------------------
-active <- "scenario2" 
-cfg <- cfgs[[active]]
+cfg <- cfgs[[active_scenario]]
 stopifnot(!is.null(cfg))
 
 # ----------------------------

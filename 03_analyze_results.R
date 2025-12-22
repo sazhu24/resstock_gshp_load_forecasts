@@ -12,16 +12,17 @@ library(glue)
 # ----------------------------
 # 0) Configs
 # ----------------------------
-active_scenario <- "scenario2"
-
 source("00_config.R")
 
+# Change this to switch which scenario is processed
+#active_scenario <- "scenario1"
+
+# Use centralized config values
 cfg <- list(
-  # peak day labels used in plots
-  summer_peak_day   = "2018-07-02",
-  summer_peak_label = "July 2, 4PM",
-  winter_peak_day   = "2018-01-07",
-  winter_peak_label = "Jan 7, 7AM"
+  summer_peak_day   = summer_peak_day,
+  summer_peak_label = summer_peak_label,
+  winter_peak_day   = winter_peak_day,
+  winter_peak_label = winter_peak_label
 )
 
 # ----------------------------
