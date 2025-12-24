@@ -22,7 +22,7 @@ conflicted::conflict_prefer("summarize", "dplyr")
 source("00_config.R")
 
 # Change this to switch which scenario is processed
-#active_scenario <- "scenario1"
+active_scenario <- "scenario5"
 
 # Use centralized config values
 cfg <- list(
@@ -132,9 +132,9 @@ get_timeseries <- function(buildings_df, upgrade) {
     )
   })
   
-  if (i %% 10 == 0 || i == n_total) {
-    message(glue("Loaded {i}/{n_total} buildings (upgrade {upgrade})"))
-  }
+  # if (i %% 10 == 0 || i == n_total) {
+  #   message(glue("Loaded {i}/{n_total} buildings (upgrade {upgrade})"))
+  # }
   
 }
 
@@ -214,6 +214,7 @@ compare_scenarios <- function(df_base, df_upg) {
       gas_total_savings   = gas_total_mwh_base - gas_total_mwh_upg,
       gas_heating_savings = gas_heating_mwh_base - gas_heating_mwh_upg,
       
+      # ad
       cooling_load_ratio = if_else(cooling_load_kbtu_base == 0, 0, cooling_load_kbtu_upg / cooling_load_kbtu_base),
       heating_load_ratio = if_else(heating_load_kbtu_base == 0, 0, heating_load_kbtu_upg / heating_load_kbtu_base),
       

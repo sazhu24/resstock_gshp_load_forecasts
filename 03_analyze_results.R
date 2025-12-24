@@ -15,7 +15,7 @@ library(glue)
 source("00_config.R")
 
 # Change this to switch which scenario is processed
-#active_scenario <- "scenario1"
+active_scenario <- "scenario5"
 
 # Use centralized config values
 cfg <- list(
@@ -34,7 +34,7 @@ get_scenario <- function(
     file_name = "combined_8760.csv",
     root_dir
 ) {
-  file_path <- fs::path(root_dir, scenario_name, "results", file_name)
+  file_path <- fs::path(root_dir, "ResStock", active_scenario, "results", file_name)
   
   if (!fs::file_exists(file_path)) {
     stop(glue("Results file not found for {scenario_name}:\n{file_path}"),
@@ -59,7 +59,8 @@ scenario_map <- tibble::tribble(
   "scenario1", "Electric Furnace + Central AC",
   "scenario2", "Gas Furnace + Central AC",
   "scenario3", "Gas Furnace + Central AC",
-  "scenario4", "Any Furnace + Central AC"
+  "scenario4", "Any Furnace + Central AC",
+  "scenario5", "Electric Furnace + Central AC"
 )
 
 scenarios <- purrr::pmap(
@@ -79,7 +80,7 @@ names(scenarios) <- scenario_map$scenario_name
 hourly_load_data <- scenarios[[active_scenario]]$df
 equipment <- scenarios[[active_scenario]]$label
 
-results_dir <- fs::path(root_dir, active_scenario, "results")
+results_dir <- fs::path(root_dir, "ResStock", active_scenario, "results")
 fs::dir_create(results_dir)
 
 # ----------------------------
@@ -179,6 +180,33 @@ p <- plot_line(
   scale_x_datetime(date_labels = "%H:%M", date_breaks = "4 hours")
 
 p
+
+
+# ----------------------------
+# winter peak day plot
+# ----------------------------
+winter_peak <- hourly_load_data %>%
+  filter(str_starts(as.character(time_hr), cfg$winter_peak_day)) %>%
+  transmute(
+    time_hr,
+    heating_kw_base   = all_heating_electricity_mwh_base * 1000,
+    heating_kw_upg    = all_heating_electricity_mwh_upg  * 1000,
+    heating_kw_scaled = heating_mwh_scaled * 1000
+  )
+
+w <- plot_line(
+  winter_peak,
+  x = time_hr,
+  y_cols = c("heating_kw_base", "heating_kw_scaled", "heating_kw_upg"),
+  labels = c("Baseline AC (Unscaled)", "Baseline AC (Scaled Up)", "GSHP heating"),
+  title = glue("Summer Peak Day Hourly heating Load ({equipment})"),
+  subtitle = cfg$winter_peak_label,
+  y_lab = "kW"
+) +
+  scale_x_datetime(date_labels = "%H:%M", date_breaks = "4 hours")
+
+w
+
 
 # ----------------------------
 # Save outputs

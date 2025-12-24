@@ -22,7 +22,7 @@ conflicted::conflict_prefer("summarize", "dplyr")
 source("00_config.R")
 
 # Change this to switch which scenario is processed
-#active_scenario <- "scenario1"
+active_scenario <- "scenario5"
 
 # ----------------------------
 # Scenario definitions
@@ -75,8 +75,8 @@ cfgs <- list(
     scenario = "scenario5",
     sqft_allowed    = c(1698, 2179, 2678),
     vintage_allowed = c("1990s", "1980s", "1970s"),
-    hvac_efficiency = "Fuel Furnace, 80% AFUE"
-    # heating_fuel optional / omitted
+    hvac_efficiency = "Electric Furnace, 100% AFUE",
+    heating_fuel    = "Electricity"
   )
 )
 
@@ -230,9 +230,11 @@ applicable_buildings_avg <- applicable_buildings %>%
     base_tons_heating = mean(out.params.size_heating_system_primary_k_btu_h / 12, na.rm = TRUE),
     base_tons_cooling = mean(out.params.size_cooling_system_primary_k_btu_h / 12, na.rm = TRUE),
     upgrade_tons_heating = mean(upgrade_tons_heating, na.rm = TRUE),
+    electric_heating = mean((out.electric.heating.energy_consumption.kwh)/1000),
     gas_heating = mean((out.natural_gas.heating.energy_consumption.kwh)/1000),
     propane_heating = mean((out.propane.heating.energy_consumption.kwh)/1000),
-    fuel_oil_heating = mean((out.fuel_oil.heating.energy_consumption.kwh)/1000)
+    fuel_oil_heating = mean((out.fuel_oil.heating.energy_consumption.kwh)/1000),
+    electric_cooling = mean((out.electric.cooling.energy_consumption.kwh)/1000)
   )
 
 write_csv(applicable_buildings_avg, glue('{paths$out_dir}/sample_average.csv'))
