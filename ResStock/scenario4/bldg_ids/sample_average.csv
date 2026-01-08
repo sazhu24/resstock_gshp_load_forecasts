@@ -1,0 +1,2 @@
+count,base_tons_heating,base_tons_cooling,upgrade_tons_heating,gas_heating,propane_heating,fuel_oil_heating,out.load.heating.energy_delivered.kbtu,out.load.cooling.energy_delivered.kbtu
+100,5.17675,3.087258333333333,5.527691666666667,11.20406305202353,1.4840386315845902,4.1094689223512155,63119.69,42812.19

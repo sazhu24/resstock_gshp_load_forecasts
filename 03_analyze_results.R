@@ -15,7 +15,7 @@ library(glue)
 source("00_config.R")
 
 # Change this to switch which scenario is processed
-active_scenario <- "scenario5"
+#active_scenario <- "scenario1"
 
 # Use centralized config values
 cfg <- list(
@@ -168,7 +168,7 @@ summer_peak <- hourly_load_data %>%
     cooling_kw_scaled = cooling_mwh_scaled * 1000
   )
 
-p <- plot_line(
+s_plot <- plot_line(
   summer_peak,
   x = time_hr,
   y_cols = c("cooling_kw_base", "cooling_kw_scaled", "cooling_kw_upg"),
@@ -179,8 +179,7 @@ p <- plot_line(
 ) +
   scale_x_datetime(date_labels = "%H:%M", date_breaks = "4 hours")
 
-p
-
+s_plot
 
 # ----------------------------
 # winter peak day plot
@@ -194,26 +193,34 @@ winter_peak <- hourly_load_data %>%
     heating_kw_scaled = heating_mwh_scaled * 1000
   )
 
-w <- plot_line(
+w_plot <- plot_line(
   winter_peak,
   x = time_hr,
   y_cols = c("heating_kw_base", "heating_kw_scaled", "heating_kw_upg"),
   labels = c("Baseline AC (Unscaled)", "Baseline AC (Scaled Up)", "GSHP heating"),
-  title = glue("Summer Peak Day Hourly heating Load ({equipment})"),
+  title = glue("Winter Peak Day Hourly heating Load ({equipment})"),
   subtitle = cfg$winter_peak_label,
   y_lab = "kW"
 ) +
   scale_x_datetime(date_labels = "%H:%M", date_breaks = "4 hours")
 
-w
-
+w_plot
 
 # ----------------------------
 # Save outputs
 # ----------------------------
 ggsave(
   fs::path(results_dir, glue("summer_peak_cooling_{active_scenario}.png")),
-  p,
+  s_plot,
+  width = 9,
+  height = 5,
+  units = "in",
+  dpi = 300
+)
+
+ggsave(
+  fs::path(results_dir, glue("winter_peak_cooling_{active_scenario}.png")),
+  w_plot,
   width = 9,
   height = 5,
   units = "in",
@@ -228,4 +235,9 @@ write_csv(
 write_csv(
   summer_peak %>% mutate(time_hr = as.character(time_hr)),
   fs::path(results_dir, "summer_peak_day.csv")
+)
+
+write_csv(
+  winter_peak %>% mutate(time_hr = as.character(time_hr)),
+  fs::path(results_dir, "winter_peak_day.csv")
 )

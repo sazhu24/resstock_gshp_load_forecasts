@@ -22,7 +22,7 @@ conflicted::conflict_prefer("summarize", "dplyr")
 source("00_config.R")
 
 # Change this to switch which scenario is processed
-active_scenario <- "scenario5"
+#active_scenario <- "scenario3"
 
 # ----------------------------
 # Scenario definitions
@@ -74,7 +74,7 @@ cfgs <- list(
   scenario5 = merge_cfg(
     scenario = "scenario5",
     sqft_allowed    = c(1698, 2179, 2678),
-    vintage_allowed = c("1990s", "1980s", "1970s"),
+    vintage_allowed = c("1990s"),
     hvac_efficiency = "Electric Furnace, 100% AFUE",
     heating_fuel    = "Electricity"
   )
@@ -90,10 +90,8 @@ stopifnot(!is.null(cfg))
 # Paths (derived from cfg)
 # ----------------------------
 paths <- list(
-  baseline_csv = fs::path(cfg$root_dir, "data", "VA_baseline_metadata_and_annual_results.csv"),
-  u5_csv       = fs::path(cfg$root_dir, "data", "VA_upgrade05_metadata_and_annual_results.csv"),
-  out_dir      = fs::path("ResStock", cfg$scenario, "bldg_ids"),
-  out_path     = fs::path("ResStock", cfg$scenario, "bldg_ids", "applicable_buildings.csv")
+  out_dir = fs::path("ResStock", active_scenario, "bldg_ids"),
+  out_path = fs::path("ResStock", active_scenario, "bldg_ids", "applicable_buildings.csv")
 )
 
 fs::dir_create(paths$out_dir)
@@ -194,11 +192,11 @@ sample_ids <- function(df, n, seed) {
 # ----------------------------
 # 2) Read inputs
 # ----------------------------
-if (!fs::file_exists(paths$baseline_csv)) stop(glue("Missing file: {paths$baseline_csv}"))
-if (!fs::file_exists(paths$u5_csv)) stop(glue("Missing file: {paths$u5_csv}"))
+if (!fs::file_exists(baseline_csv)) stop(glue("Missing file: {baseline_csv}"))
+if (!fs::file_exists(upgrade05_csv)) stop(glue("Missing file: {upgrade05_csv}"))
 
-rstock_base <- read_csv(paths$baseline_csv, show_col_types = FALSE)
-rstock_u5 <- read_csv(paths$u5_csv, show_col_types = FALSE)
+rstock_base <- read_csv(baseline_csv)
+rstock_u5 <- read_csv(upgrade05_csv)
 
 # ----------------------------
 # 3) Build eligible pool (+ enforce upgrade5 applicability)
@@ -230,11 +228,16 @@ applicable_buildings_avg <- applicable_buildings %>%
     base_tons_heating = mean(out.params.size_heating_system_primary_k_btu_h / 12, na.rm = TRUE),
     base_tons_cooling = mean(out.params.size_cooling_system_primary_k_btu_h / 12, na.rm = TRUE),
     upgrade_tons_heating = mean(upgrade_tons_heating, na.rm = TRUE),
-    electric_heating = mean((out.electric.heating.energy_consumption.kwh)/1000),
     gas_heating = mean((out.natural_gas.heating.energy_consumption.kwh)/1000),
     propane_heating = mean((out.propane.heating.energy_consumption.kwh)/1000),
     fuel_oil_heating = mean((out.fuel_oil.heating.energy_consumption.kwh)/1000),
-    electric_cooling = mean((out.electric.cooling.energy_consumption.kwh)/1000)
+    out.load.heating.energy_delivered.mwh = mean(out.load.heating.energy_delivered.kbtu*0.000293071),
+    out.load.cooling.energy_delivered.mwh = mean(out.load.cooling.energy_delivered.kbtu*0.000293071)
+    
   )
 
 write_csv(applicable_buildings_avg, glue('{paths$out_dir}/sample_average.csv'))
+
+
+
+rstock_names <- data.frame(names = names(rstock_base))

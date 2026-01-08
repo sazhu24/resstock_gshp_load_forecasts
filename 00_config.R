@@ -10,12 +10,12 @@ stopifnot(dir.exists(root_dir))
 # Active scenario selection
 # ----------------------------
 # Change this to switch which scenario is processed
-active_scenario <- "scenario5"
+active_scenario <- "scenario1"
 
 # ----------------------------
 # Sampling controls
 # ----------------------------
-sample_size <- 20
+sample_size <- 100
 seed <- 123
 
 # ----------------------------

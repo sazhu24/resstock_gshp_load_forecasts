@@ -1,0 +1,4 @@
+scenario,elec_heating_mwh,elec_cooling_mwh,gas_heating_mwh
+Baseline,16.28111527,3.7228986600000002,0
+Baseline (Scaled Up),15.877595262699607,3.703663790765205,0
+Upgrade,4.08484655,2.83685218,0
