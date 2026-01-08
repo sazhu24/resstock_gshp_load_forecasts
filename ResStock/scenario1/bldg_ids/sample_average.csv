@@ -1,2 +1,2 @@
-count,base_tons_heating,base_tons_cooling,upgrade_tons_heating,gas_heating,propane_heating,fuel_oil_heating,out.load.heating.energy_delivered.mwh,out.load.cooling.energy_delivered.mwh
-100,5.146116666666667,2.924825,5.297033333333333,0,0,0,16.89230471545,12.43575865318
+count,base_tons_heating,base_tons_cooling,upgrade_tons_heating,gas_heating,propane_heating,fuel_oil_heating,out.load.heating.energy_delivered.mwh,out.load.cooling.energy_delivered.mwh,sqft,cooling_space_conditioned_sqft,cooling_efficiency_SEER
+100,5.146116666666667,2.924825,5.297033333333333,0,0,0,16.89230471545,12.43575865318,2087.12,1997.238,12.8

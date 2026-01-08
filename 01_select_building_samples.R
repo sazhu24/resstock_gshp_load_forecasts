@@ -222,18 +222,23 @@ message(glue("Wrote {nrow(applicable_buildings)} buildings to: {paths$out_path}"
 # Get summary stats
 # ----------------------------
 applicable_buildings_avg <- applicable_buildings %>%
-  #group_by(in.heating_fuel) |> 
+  mutate(
+    in.hvac_cooling_partial_space_conditioning =
+      as.numeric(str_extract(in.hvac_cooling_partial_space_conditioning, "\\d+")) / 100,
+    sqft_conditioned = in.sqft * in.hvac_cooling_partial_space_conditioning
+  ) |> 
   summarize(
     count = n(),
     base_tons_heating = mean(out.params.size_heating_system_primary_k_btu_h / 12, na.rm = TRUE),
     base_tons_cooling = mean(out.params.size_cooling_system_primary_k_btu_h / 12, na.rm = TRUE),
     upgrade_tons_heating = mean(upgrade_tons_heating, na.rm = TRUE),
+    sqft = mean(in.sqft),
+    cooling_space_conditioned_sqft = mean(sqft_conditioned),
     gas_heating = mean((out.natural_gas.heating.energy_consumption.kwh)/1000),
     propane_heating = mean((out.propane.heating.energy_consumption.kwh)/1000),
     fuel_oil_heating = mean((out.fuel_oil.heating.energy_consumption.kwh)/1000),
     out.load.heating.energy_delivered.mwh = mean(out.load.heating.energy_delivered.kbtu*0.000293071),
     out.load.cooling.energy_delivered.mwh = mean(out.load.cooling.energy_delivered.kbtu*0.000293071)
-    
   )
 
 write_csv(applicable_buildings_avg, glue('{paths$out_dir}/sample_average.csv'))

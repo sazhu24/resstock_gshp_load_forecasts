@@ -49,7 +49,7 @@ cfg <- list(
 results_dir <- path("ResStock", active_scenario, "results")
 out_path_summer <- path(results_dir, "all_buildings_summer_peak_hr.csv")
 out_path_winter <- path(results_dir, "all_buildings_winter_peak_hr.csv")
-out_path_combined_8760 <- path(results_dir, "all_buildings_winter_peak_hr.csv")
+out_path_combined_8760 <- path(results_dir, "combined_8760.csv")
 
 dir_create(results_dir, recurse = TRUE)
 dir_create(cfg$cache_dir)
